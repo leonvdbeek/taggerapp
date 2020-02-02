@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  GoogleMapProvider,
-  MapBox,
-  Marker,
-  CustomControl
-} from "@googlemap-react/core";
 import {Button, Dialog, DialogTitle, DialogActions, DialogContent, DialogContentText, TextField, Typography, } from '@material-ui/core';
+import TagMap from "./components/TagMap";
 
 const axios = require("axios");
 
@@ -103,41 +98,8 @@ export default function App() {
 
   return (
     <div className="App">
-      <GoogleMapProvider>
-        <MapBox
-          apiKey="AIzaSyBemL6idNDqQ9rh3jZvAzq9F6sAfYGBIf4"
-          style={{
-            height: "100vh",
-            width: "100%"
-          }}
-          opts={{
-            center: cent,
-            zoom: 6,
-            disableDefaultUI: false,
-            fullscreenControl: false,
-            streetViewControl: false
-          }}
-        />
+      <TagMap cent={cent} setOpen={setOpen} tags={tags}/>
 
-        <CustomControl bindingPosition="BOTTOM_CENTER">
-          <Button variant="contained" color="primary" onClick={() => setOpen(true)} style={{ marginBottom: "20px" }}>
-            Place tag!
-          </Button>
-        </CustomControl>
-
-        {tags.map(tag => (
-          <Marker
-            key={tag._id}
-            id={tag.name}
-            opts={{
-              position: {
-                lat: tag.lat,
-                lng: tag.lng
-              }
-            }}
-          />
-        ))}
-      </GoogleMapProvider>
       <Dialog onClose={() => setOpen(false)} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">Create a new tag!</DialogTitle>
       <DialogContent>
