@@ -7,6 +7,7 @@ export default function TagDialog(props) {
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState("");
   const [desc, setDesc] = React.useState("");
+  const [hasError, setError] = React.useState(false);
 
   // Function to get all tags from database
   const getData = () => {
@@ -28,10 +29,10 @@ export default function TagDialog(props) {
   };
 
   // Function to create a new tag based on GeoLocation
-  const postTag = () => {
+  const postTag = (fileid) => {
     console.log("posting new tag (" + props.cent.lat + ", " + props.cent.lng + ")...");
 
-    axios.post('https://tagger-aa28.restdb.io/rest/tags', { name: name, description: desc, lat: props.cent.lat, lng: props.cent.lng, img: file }, {
+    axios.post('https://tagger-aa28.restdb.io/rest/tags', { name: name, description: desc, lat: props.cent.lat, lng: props.cent.lng, img: fileid }, {
       headers: {
         'cache-control': 'no-cache',
         "x-apikey": "5e33ef294327326cf1c91d89"
@@ -42,34 +43,48 @@ export default function TagDialog(props) {
         //After posting make sure to get the data again
         getData();
         props.setOpen(false);
+        setFile();
+        setName("");
+        setDesc("");
+        setError(false);
       })
   };
 
-  const handleFileUpload = (file) => {
-    const fd = new FormData();
-    fd.append('image', file, file.name);
-    axios.post('https://tagger-aa28.restdb.io/media', fd, {
-      headers: {
-        'cache-control': 'no-cache',
-        "x-apikey": "5e33ef294327326cf1c91d89"
-      }
-    })
-      .then(res => {
-        console.log(res)
-        setFile(res.data.ids[0])
+  const handleFileUpload = () => {
+    if (name === '') {
+      setError(true)
+    } else {
+      console.log("Uploading image..")
+      const fd = new FormData();
+      fd.append('image', file, file.name);
+      axios.post('https://tagger-aa28.restdb.io/media', fd, {
+        headers: {
+          'cache-control': 'no-cache',
+          "x-apikey": "5e33ef294327326cf1c91d89"
+        }
       })
+        .then(res => {
+          console.log(res)
+          postTag(res.data.ids[0])
+        })
+    }
   };
 
   return (
-    <Dialog onClose={() => props.setOpen(false)} aria-labelledby="simple-dialog-title" open={props.open}>
+    <Dialog onClose={() => {
+      props.setOpen(false)
+      setError(false)
+    }} aria-labelledby="simple-dialog-title" open={props.open}>
       <DialogTitle id="simple-dialog-title">Create a new tag!</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          To subscribe to this website, please enter your email address here. We will send updates
-          occasionally.
+          Insert a name, description and upload an image and post a new tag! The GPS coordinates are based on your location!
         </DialogContentText>
         <TextField
           autoFocus
+          required
+          error={hasError}
+          helperText={hasError ? 'Name can not be empty!' : ' '}
           variant="outlined"
           margin="dense"
           id="name"
@@ -114,21 +129,24 @@ export default function TagDialog(props) {
           style={{ display: 'none' }}
           id="raised-button-file"
           type="file"
-          onChange={(event) => handleFileUpload(event.target.files[0])}
+          onChange={(event) => setFile(event.target.files[0])}
         />
         <label htmlFor="raised-button-file">
           <Button variant="outlined" component="span" margin="dense">
             Upload
           </Button>
-          <Typography>{file ? 'Uploaded: ' + file : 'Please upload a file'}</Typography>
+          <Typography>{file ? 'Selected: ' + file.name : 'Please upload a file'}</Typography>
         </label>
 
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => props.setOpen(false)} color="primary">
+        <Button onClick={() => {
+          props.setOpen(false)
+          setError(false)
+        }} color="primary">
           Cancel
         </Button>
-        <Button onClick={() => postTag()} color="primary">
+        <Button onClick={() => handleFileUpload()} color="primary">
           Tag!
         </Button>
       </DialogActions>
