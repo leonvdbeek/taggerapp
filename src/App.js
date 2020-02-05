@@ -25,25 +25,25 @@ export default function App() {
           lng: position.coords.longitude
         };
         setCent(pos);
-      })
+        // Get the data aswell
+        console.log("getting data...");
+        axios
+          .get("https://tagger-aa28.restdb.io/rest/tags", {
+            headers: {
+              'cache-control': 'no-cache',
+              "x-apikey": "5e33ef294327326cf1c91d89"
+            }
+          })
+          .then(function (response) {
+            console.log(response.data);
+            setTags(response.data);
+            setLoading(false);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }, () => alert("GPS not working"))
     }
-    // Get the data aswell
-    console.log("getting data...");
-    axios
-      .get("https://tagger-aa28.restdb.io/rest/tags", {
-        headers: {
-          'cache-control': 'no-cache',
-          "x-apikey": "5e33ef294327326cf1c91d89"
-        }
-      })
-      .then(function (response) {
-        console.log(response.data);
-        setTags(response.data);
-        setLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   };
 
   return (

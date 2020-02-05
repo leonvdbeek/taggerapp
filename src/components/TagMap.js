@@ -6,12 +6,12 @@ import {
   Marker,
   CustomControl
 } from "@googlemap-react/core";
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
 export default function TagMap(props) {
 
   return (
-    <LoadingOverlay active={props.loading} spinner text='Loading data...'>
+    <LoadingOverlay active={props.loading} spinner text={<Typography>Loading data..</Typography>}>
       <GoogleMapProvider>
         <MapBox
           apiKey="AIzaSyBemL6idNDqQ9rh3jZvAzq9F6sAfYGBIf4"

@@ -80,7 +80,7 @@ export default function PlaceTagDialog(props) {
       props.setOpen(false)
       setError(false)
     }} aria-labelledby="simple-dialog-title" open={props.open}>
-      <LoadingOverlay active={uploading} spinner text='Uploading data...'>
+      <LoadingOverlay active={uploading} spinner text={<Typography>Uploading data..</Typography>}>
         <DialogTitle id="simple-dialog-title">Create a new tag!</DialogTitle>
         <DialogContent>
           <DialogContentText>
