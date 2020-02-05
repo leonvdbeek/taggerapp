@@ -1,10 +1,14 @@
 import React from "react";
-import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField, CircularProgress } from '@material-ui/core';
 
 export default function InfoTagDialog(props) {
 
+  const [loaded, setLoaded] = React.useState(false);
   return (
-    <Dialog onClick={() => props.setOpen(false)} aria-labelledby="simple-dialog-title" open={props.open}>
+    <Dialog onClick={() => {
+      props.setOpen(false)
+      setLoaded(false)
+    }} aria-labelledby="simple-dialog-title" open={props.open}>
       <DialogTitle id="simple-dialog-title">Tag info for tag: {props.tag.name}</DialogTitle>
       <DialogContent>
         <TextField
@@ -47,10 +51,18 @@ export default function InfoTagDialog(props) {
           fullWidth
           value={props.tag.lng}
         />
-        <img src={"https://tagger-aa28.restdb.io/media/" + props.tag.img}></img>
+        <div style={{ display: loaded ? "none" : "block" }}>
+          <CircularProgress />
+        </div>
+        <div style={{ display: loaded ? "block" : "none" }}>
+          <img src={"https://tagger-aa28.restdb.io/media/" + props.tag.img} alt="No upload available." onLoad={() => setLoaded(true)}></img>
+        </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => props.setOpen(false)}
+        <Button onClick={() => {
+          props.setOpen(false)
+          setLoaded(false)
+        }}
           color="primary">
           Close
         </Button>
