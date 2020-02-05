@@ -1,13 +1,16 @@
 import React from 'react';
 import TagMap from './components/TagMap';
-import TagDialog from './components/TagDialog';
+import PlaceTagDialog from './components/PlaceTagDialog';
+import TagInfoDialog from './components/InfoTagDialog';
 
 const axios = require("axios");
 
 export default function App() {
   const [tags, setTags] = React.useState([]);
   const [cent, setCent] = React.useState({ lat: 33, lng: 33 });
-  const [open, setOpen] = React.useState(false);
+  const [openPlace, setOpenPlace] = React.useState(false);
+  const [openInfo, setOpenInfo] = React.useState(false);
+  const [selectedTag, setSelectedTag] = React.useState({ lat: 0, lng: 0, name: "", desc: "", img: 0 });
 
   //At render will call getData
   React.useEffect(() => (initMap()), []);
@@ -43,9 +46,9 @@ export default function App() {
 
   return (
     <div className="App">
-      <TagMap cent={cent} open={open} setOpen={setOpen} tags={tags} />
-
-      <TagDialog cent={cent} open={open} setOpen={setOpen} setTags={setTags} />
+      <TagMap cent={cent} setSelectedTag={setSelectedTag} openPlace={openPlace} setOpenPlace={setOpenPlace} openInfo={openInfo} setOpenInfo={setOpenInfo} tags={tags} />
+      <TagInfoDialog open={openInfo} setOpen={setOpenInfo} tag={selectedTag} />
+      <PlaceTagDialog cent={cent} open={openPlace} setOpen={setOpenPlace} setTags={setTags} />
     </div>
   );
 }

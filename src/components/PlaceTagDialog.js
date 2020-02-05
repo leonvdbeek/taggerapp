@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, DialogActions, DialogContent, DialogConten
 
 const axios = require("axios");
 
-export default function TagDialog(props) {
+export default function PlaceTagDialog(props) {
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState("");
   const [desc, setDesc] = React.useState("");
