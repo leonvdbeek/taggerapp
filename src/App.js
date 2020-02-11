@@ -42,7 +42,7 @@ export default function App() {
           .catch(function (error) {
             console.log(error);
           });
-      }, () => alert("GPS not working"))
+      })
     }
   };
 
