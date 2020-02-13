@@ -11,14 +11,14 @@ import { Button, Typography } from '@material-ui/core';
 export default function TagMap(props) {
 
   return (
-    <LoadingOverlay style={{ height: "100%" }} active={props.loading} spinner text={<Typography>Loading data..</Typography>}>
+    <LoadingOverlay style={{ height: "100%", position: "fixed" }} active={props.loading} spinner text={<Typography>Loading data..</Typography>}>
       <GoogleMapProvider>
         <MapBox
           apiKey="AIzaSyBemL6idNDqQ9rh3jZvAzq9F6sAfYGBIf4"
           style={{
             height: "100vh",
             width: "100vw",
-            minHeight: "-webkit-fill-available"
+            minHeight: "-webkit-fill-available", position: "fixed"
           }}
           opts={{
             center: props.cent,
