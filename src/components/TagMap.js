@@ -17,7 +17,8 @@ export default function TagMap(props) {
           apiKey="AIzaSyBemL6idNDqQ9rh3jZvAzq9F6sAfYGBIf4"
           style={{
             height: "100vh",
-            width: "100%"
+            width: "100%",
+            minHeight: "-webkit-fill-available"
           }}
           opts={{
             center: props.cent,
